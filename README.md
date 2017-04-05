@@ -25,9 +25,3 @@ portion should just be a matter of making a call to the go binary in some sandbo
 to implement.
 
 I will be taking advantage of the article written about the official playground implementation here: https://blog.golang.org/playground
-
-# Authors
-
-Nick Brown ([@ncbrown1](https://github.com/ncbrown1))
-
-<img src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAibAAAAJDk5ZmRhNjQ3LTM4YzktNDNlZC1hOWY3LTkyNzU2MDg0ZGVhOA.jpg" title="ncbrown" height="250" />
