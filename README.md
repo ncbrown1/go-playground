@@ -25,3 +25,9 @@ portion should just be a matter of making a call to the go binary in some sandbo
 to implement.
 
 I will be taking advantage of the article written about the official playground implementation here: https://blog.golang.org/playground
+
+To take this project to the next level beyond what is written above, it may be worthwhile to investiage the use of Google's "Native
+Client", which allows compiled C/C++ (and Go) code to be run in the browser efficiently and securely. In this case, the output stream
+from the job runner will stream the compiled binary to the web client instead of the output from the program being run on the server.
+This investigation would be very interesting, as the code would be running under different circumstances than usual. There are many
+aspects of running in a browser that are quite different than running on hardware, such as the file system, the network, and concurrency.
