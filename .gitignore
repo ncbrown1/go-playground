@@ -22,3 +22,9 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# IDE specific ignores
+.idea
+
+# folder using for go packages
+packages/
