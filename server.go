@@ -6,8 +6,6 @@ import (
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -36,8 +34,4 @@ func main() {
 	}
 
 	log.Fatal(srv.ListenAndServe())
-}
-
-func RootHandler(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "index.html", nil)
 }

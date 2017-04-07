@@ -28,4 +28,11 @@ func NewRouter() *mux.Router {
     return router
 }
 
-var routes = Routes{}
+var routes = Routes{
+    Route{
+        "Index",
+        "GET",
+        "/",
+        Index,
+    },
+}
