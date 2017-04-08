@@ -19,9 +19,9 @@ func main() {
 
 	address = fmt.Sprintf("%s:%s", host, port)
 
-	// This will serve files under http://localhost:8000/static/<filename>
+	router := NewRouter()
+	// This will serve files under /static/<filename>
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(sdir))))
-	router.HandleFunc("/", RootHandler)
 
 	log.Printf("Serving site at http://%s\n", address)
 
