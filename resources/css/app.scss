@@ -2,6 +2,8 @@
 // Bootstrap
 @import "bootstrap-variables";
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/theme/monokai.css";
 
 $my-color: #bada55;
 

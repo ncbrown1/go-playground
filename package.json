@@ -25,5 +25,8 @@
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js -p",
     "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --progress --colors --inline"
+  },
+  "dependencies": {
+    "codemirror": "^5.25.0"
   }
 }
