@@ -1,3 +1,4 @@
 #!/bin/bash
 
+npm run build
 go run app/*.go -host 127.0.0.1 -port 8000
