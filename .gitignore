@@ -34,3 +34,4 @@ node_modules/
 # compiled bundles (these shouldn't be stored since they're generated)
 public/css/main.css*
 public/js/bundle.js*
+public/fonts/glyphicon*
