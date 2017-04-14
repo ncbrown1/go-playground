@@ -9,9 +9,8 @@ import (
 )
 
 func main() {
-	var sdir, host, port, address string
+	var host, port, address string
 
-	flag.StringVar(&sdir, "dir", "./static/", "the directory to serve static files from")
 	flag.StringVar(&host, "host", "127.0.0.1", "the host to bind to for serving")
 	flag.StringVar(&port, "port", "8000", "the port to bind to for servinbg")
 	flag.Parse()
@@ -19,8 +18,8 @@ func main() {
 	address = fmt.Sprintf("%s:%s", host, port)
 
 	router := NewRouter()
-	// This will serve files under /static/<filename>
-	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(sdir))))
+	// This will serve all public files under /<filename>
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
 
 	log.Printf("Serving site at http://%s\n", address)
 
