@@ -15,7 +15,6 @@ func main() {
 	flag.StringVar(&host, "host", "127.0.0.1", "the host to bind to for serving")
 	flag.StringVar(&port, "port", "8000", "the port to bind to for servinbg")
 	flag.Parse()
-	router := mux.NewRouter()
 
 	address = fmt.Sprintf("%s:%s", host, port)
 
