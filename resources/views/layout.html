@@ -3,12 +3,16 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{{template "title"}}</title>
+    <title>{{block "title" .}}GoPlayground{{end}}</title>
     <link rel="stylesheet" href="/css/main.css">
+
+    {{block "head" .}} <!-- Default No Content--> {{end}}
 </head>
 <body>
     {{template "body"}}
+
     <script src="/js/bundle.js"></script>
+    {{block "scripts" .}} <!-- Default No Content--> {{end}}
 </body>
 </html>
 {{end}}
