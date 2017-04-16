@@ -5,8 +5,57 @@
 @import "~codemirror/lib/codemirror.css";
 @import "~codemirror/theme/monokai.css";
 
-$my-color: #bada55;
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+nav.navbar {
+  margin-bottom: 0;
+}
+nav .btn {
+  padding: 6px;
+  margin-right: 4px;
+}
+.navbar-form {
+  padding: 0;
+}
+#share-url {
+  resize: horizontal;
+  display: none;
+}
+#share-url.active {
+  display: block;
+}
 
-body {
-  background-color: $my-color;
+#go-editor {
+  display: flex;
+  margin: 0;
+  position: absolute;
+  top: 50px;
+  bottom: 25%;
+  left: 0;
+  right: 0;
+}
+#go-output {
+  position: absolute;
+  top: 75%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+}
+#go-editor > .CodeMirror {
+  align-items: stretch;
+  width: 100%;
+  height: inherit;
+}
+#go-output > pre {
+  margin: 0 0 0 -5em;
+  border: 0;
+}
+#go-output .system {
+  color: #999;
+  line-height: 5em;
 }
