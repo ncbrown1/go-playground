@@ -5,6 +5,38 @@
 This is a reimplementation of the Go playground [https://play.golang.org] in Go to run via the browser (javascript + go) without the
 restrictions of the original (but requiring a login to bypass those restrictions).
 
+# Getting Started
+
+This package uses Go and Node.JS-based packages in its implementation. Ensure you have those tools installed.
+
+Go installation: [https://golang.org/doc/install](https://golang.org/doc/install)\
+Node.JS/NPM: [https://nodejs.org/en/download/package-manager/](https://nodejs.org/en/download/package-manager/)
+
+For package management in Go and Node.JS, we use Glide and Yarn, respectively. Ensure you have those tools installed.
+
+Yarn: `npm install -g yarn`\
+Glide: [https://glide.sh/](https://glide.sh/)
+
+Now that you have the proper tooling, you can update your dependency trees to gather all the required packages and dependencies:
+
+```
+$ glide install
+$ yarn install
+```
+
+With all the required tools and packages, you can run the service via `./serve`.
+
+# Development
+
+All Go source files are located in the `app/` subdirectory. All front-end resources are located in the `resources/` subdirectory. Anything in the `public/` subdirectory is directly served from the web server off of the root (`"/"`) path.
+ 
+Style resources located in the `resources/css` directory are written in [Sass/Scss](http://sass-lang.com/). The entry point for all styles is `resources/css/app.scss`. Any styles referred to or imported in that file will be included in the final transpiled/compiled output (`public/css/main.css`).
+
+Javascript resources located in the `resources/js` directory are written using the new syntax of javascript, i.e. ES6/ES2015. The entry point for all javascript sources is `resources/js/app.js`. Any scripts/libraries referred to or imported in that file will be included in the final transpiled/compiled output (`public/js/bundle.js`).
+
+To add a Go dependency: `glide get github.com/foo/bar`\
+To add a Yarn dependency: `yarn add foo/bar`
+
 # Project Vision
 
 This project will consist of three parts: the web page for showing content and allowing input, the web socket for transmitting data
