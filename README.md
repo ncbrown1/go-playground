@@ -26,6 +26,8 @@ $ yarn install
 
 With all the required tools and packages, you can run the service via `./serve`.
 
+Note that you should clone this repository within $GOPATH/src, or else the Go dependencies installed from Glide will not work.
+
 # Development
 
 All Go source files are located in the `app/` subdirectory. All front-end resources are located in the `resources/` subdirectory. Anything in the `public/` subdirectory is directly served from the web server off of the root (`"/"`) path.
