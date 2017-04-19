@@ -5,7 +5,7 @@
   "description": "Reimplementation of the Go playground in Go to run via the browser (javascript + go) without the restrictions of the original",
   "repository": "https://github.com/ncbrown1/GoPlayground.git",
   "author": "Nick Brown <ncbrown@cs.ucsb.edu>",
-  "devDependencies": {
+  "dependencies": {
     "axios": "^0.16.1",
     "babel-core": "^6.24.1",
     "babel-loader": "^6.4.1",
@@ -23,6 +23,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "scripts": {
+    "heroku-postbuild": "echo $PATH",
     "build": "./node_modules/webpack/bin/webpack.js -p",
     "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --hot --progress --colors --inline"
   },
