@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/ncbrown1/go-playground/app"
 )
 
 func main() {
@@ -17,7 +19,7 @@ func main() {
 
 	address = fmt.Sprintf("%s:%s", host, port)
 
-	router := NewRouter()
+	router := app.NewRouter()
 	// This will serve all public files under /<filename>
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
 
