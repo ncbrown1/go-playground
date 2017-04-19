@@ -12,21 +12,42 @@ This package uses Go and Node.JS-based packages in its implementation. Ensure yo
 Go installation: [https://golang.org/doc/install](https://golang.org/doc/install)\
 Node.JS/NPM: [https://nodejs.org/en/download/package-manager/](https://nodejs.org/en/download/package-manager/)
 
-For package management in Go and Node.JS, we use Glide and Yarn, respectively. Ensure you have those tools installed.
+Note that all development for Go-related packages should take place in your `$GOPATH/src` directory. If you have not set
+up your `$GOPATH`, be sure to create a new empty directory somewhere and export that directory as the value. For example:
 
-Yarn: `npm install -g yarn`\
-Glide: [https://glide.sh/](https://glide.sh/)
+```
+$ echo $GOPATH
+
+$ mkdir $HOME/go
+$ export GOPATH=$HOME/go
+$ echo $GOPATH
+/Users/ncbrown/go
+$ mkdir $GOPATH/src
+```
+
+Also be sure to create a directory `$GOPATH/src` to hold your go code. This is where you should be working when developing
+in Go.
+
+If you are unfamiliar with Go, you may be used to retrieving a project from github.com via `git clone`. However, the Go
+ecosystem is slightly different. You will want to retrieve this project via `go get github.com/ncbrown1/go-playground`,
+which will check out this repository under `$GOPATH/src/github.com/ncbrown1/go-playground`.
+
+For package management in Go and Node.JS, we use [govendor](https://github.com/kardianos/govendor) and
+[Yarn](https://yarnpkg.com), respectively. Ensure you have those tools installed.
+
+govendor: `go get -u github.com/kardianos/govendor`\
+Yarn: `npm install -g yarn`
 
 Now that you have the proper tooling, you can update your dependency trees to gather all the required packages and dependencies:
 
 ```
-$ glide install
+$ govendor sync
 $ yarn install
 ```
 
-With all the required tools and packages, you can run the service via `./serve`.
+With all the required tools and packages, you can run a development version of the service via `./serve`.
 
-Note that you should clone this repository within $GOPATH/src, or else the Go dependencies installed from Glide will not work.
+To run in production, run `go install`, which will create `$GOPATH/bin/go-playground`. Run that command from this directory.
 
 # Development
 
@@ -36,7 +57,7 @@ Style resources located in the `resources/css` directory are written in [Sass/Sc
 
 Javascript resources located in the `resources/js` directory are written using the new syntax of javascript, i.e. ES6/ES2015. The entry point for all javascript sources is `resources/js/app.js`. Any scripts/libraries referred to or imported in that file will be included in the final transpiled/compiled output (`public/js/bundle.js`).
 
-To add a Go dependency: `glide get github.com/foo/bar`\
+To add a Go dependency: `govendor fetch github.com/foo/bar`\
 To add a Yarn dependency: `yarn add foo/bar`
 
 # Project Vision
