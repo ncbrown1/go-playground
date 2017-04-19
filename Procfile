@@ -1,1 +1,1 @@
-web: go-playground -port $PORT
+web: go-playground -host 0.0.0.0 -port $PORT
