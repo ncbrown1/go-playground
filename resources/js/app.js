@@ -19,8 +19,12 @@ $('#share').click(() => {
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Editor from './components/editor';
+import Output from './components/output';
 
 ReactDOM.render(
-    <Editor/>,
+    <div>
+        <Editor/>
+        <Output/>
+    </div>,
     document.getElementById('root')
 );
