@@ -1,5 +1,6 @@
 
 require('./setup');
+require('./editor');
 
 function resizeInput() {
     $(this).attr('size', $(this).val().length);
@@ -14,30 +15,11 @@ $('#share').click(() => {
     share_url.focus();
 });
 
-const initial_program = `
-package main
 
-import (
-    "fmt"
-)
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-func main() {
-    fmt.Println("Hello, playground")
-}
-`.trim();
-
-CodeMirror(document.getElementById("go-editor"), {
-    autofocus: true,
-    indentUnit: 4,
-    keymap: 'sublime',
-    lineNumbers: true,
-    mode: 'go',
-    theme: 'monokai',
-    value: initial_program
-});
-
-const sample_output = 'Hello, playground';
-const sample_system = 'Program exited.';
-
-document.querySelector("#go-output .stdout").innerText = sample_output;
-document.querySelector("#go-output .system").innerText = sample_system;
+ReactDOM.render(
+    <h1>Hello, world!</h1>,
+    document.getElementById('root')
+);
