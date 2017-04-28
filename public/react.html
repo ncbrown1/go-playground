@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/img/golang-gopher.png" type="image/png">
+    <title>GoPlayground</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"      aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Branding Image -->
+            <a class="navbar-brand logo" href="#">The Go Playground (Redux)</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><p class="navbar-btn"><a href="#" class="btn btn-primary" id="go-run">Run</a></p></li>
+                <li><p class="navbar-btn"><a href="#format" class="btn btn-primary" id="format">Format</a></p></li>
+                <li><label class="navbar-btn btn btn-primary">
+                    <input type="checkbox" id="go-imports">
+                    Imports
+                </label></li>
+                <li><p class="navbar-btn"><a href="#share" class="btn btn-primary" id="share">Share</a></p></li>
+                <li><form class="navbar-form">
+                    <input type="text" id="share-url" class="form-control" value="https://bit.ly/asdsfafsd"/>
+                </form></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><p class="navbar-btn"><a href="#about" class="btn btn-primary" id="about">About</a></p></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div id="root"></div>
+
+<script src="/js/bundle.js"></script>
+</body>
+</html>
