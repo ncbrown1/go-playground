@@ -46,13 +46,15 @@ nav .btn {
   right: 0;
   padding: 8px;
 }
-#go-editor > .CodeMirror {
+#go-editor > .CodeMirror,
+#go-editor > .ReactCodeMirror,
+.ReactCodeMirror > .CodeMirror {
   align-items: stretch;
   width: 100%;
-  height: inherit;
+  height: 100%;
 }
 #go-output > pre {
-  margin: 0 0 0 -5em;
+  //margin: 0 0 0 -5em;
   border: 0;
 }
 #go-output .system {

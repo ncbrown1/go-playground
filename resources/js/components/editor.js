@@ -34,6 +34,8 @@ export default React.createClass({
             theme: 'monokai',
             value: initial_program
         };
-        return <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
+        return <div id="go-editor">
+            <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
+        </div>;
     }
 })

@@ -11,6 +11,7 @@ export default React.createClass({
         return <div id="go-output">
             <pre>
                 <span className="stdout">{this.state.stdout}</span>
+                <br/>
                 <span className="system">{this.state.system}</span>
             </pre>
         </div>;
