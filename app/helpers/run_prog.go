@@ -15,6 +15,20 @@ type Result struct {
     error  string
 }
 
+func (r Result) success() bool {
+    return r.code == 0
+}
+
+func (r Result) PrintVerbose() {
+    fmt.Println("stdout:")
+    fmt.Println(r.output)
+
+    fmt.Println("stderr:")
+    fmt.Println(r.error)
+
+    fmt.Printf("Exit status: %d\n", r.code)
+}
+
 func main() {
     filePtr := flag.String("file", "", "file path")
     flag.Parse()
@@ -24,13 +38,12 @@ func main() {
         fmt.Println(*filePtr)
 
         result := runGoProgram(*filePtr)
-        fmt.Println("stdout:")
-        fmt.Println(result.output)
+        result.PrintVerbose()
 
-        fmt.Println("stderr:")
-        fmt.Println(result.error)
-
-        fmt.Printf("Exit status: %d\n", result.code)
+        //stdout = result.output
+        //stderr = result.error
+        //system = "Program exited."
+        //exit code = result.code
     } else {
         fmt.Println("YOU MUST CHOOSE A PROPER FILE TO RUN")
     }
@@ -43,7 +56,7 @@ func runGoProgram(file string) Result {
     compiled := run("go", "tool", "compile", "-o", compile_file, file)
     run("rm", compile_file) // cleanup unneeded file
 
-    if compiled.code == 0 {
+    if compiled.success() {
         run("go", "build", "-o", exec_file, file)
         result := run(exec_file)
 
