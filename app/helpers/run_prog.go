@@ -23,29 +23,34 @@ func main() {
         fmt.Print("File chosen: ")
         fmt.Println(*filePtr)
 
-        pid := os.Getpid()
-        exec_file := fmt.Sprintf("/tmp/prog-%d", pid)
-        compile_file := fmt.Sprintf("%s-compiled.o", exec_file)
-        compiled := run("go", "tool", "compile", "-o", compile_file, *filePtr)
+        result := runGoProgram(*filePtr)
+        fmt.Println("stdout:")
+        fmt.Println(result.output)
 
-        if compiled.code == 0 {
-            fmt.Printf("Successfully compiled to: %s\n", exec_file)
+        fmt.Println("stderr:")
+        fmt.Println(result.error)
 
-            run("go", "build", "-o", exec_file, *filePtr)
-            execd := run(exec_file)
-
-            fmt.Println("stdout:")
-            fmt.Println(execd.output)
-
-            fmt.Println("stderr:")
-            fmt.Println(execd.error)
-
-            fmt.Printf("Exit status: %d\n", execd.code)
-        } else {
-            fmt.Print(compiled.output)
-        }
+        fmt.Printf("Exit status: %d\n", result.code)
     } else {
         fmt.Println("YOU MUST CHOOSE A PROPER FILE TO RUN")
+    }
+}
+
+func runGoProgram(file string) Result {
+    pid := os.Getpid()
+    exec_file := fmt.Sprintf("/tmp/prog-%d", pid)
+    compile_file := fmt.Sprintf("%s-compiled.o", exec_file)
+    compiled := run("go", "tool", "compile", "-o", compile_file, file)
+    run("rm", compile_file) // cleanup unneeded file
+
+    if compiled.code == 0 {
+        run("go", "build", "-o", exec_file, file)
+        result := run(exec_file)
+
+        run("rm", exec_file) // cleanup unneeded file
+        return result
+    } else {
+        return compiled
     }
 }
 
