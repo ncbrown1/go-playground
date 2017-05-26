@@ -20,6 +20,7 @@
     "lodash": "^4.17.4",
     "node-sass": "^4.5.2",
     "react": "^15.5.4",
+    "react-bootstrap": "^0.31.0",
     "react-codemirror": "^0.3.0",
     "react-dom": "^15.5.4",
     "sass-loader": "^6.0.3",
