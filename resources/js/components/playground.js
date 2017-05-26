@@ -18,7 +18,9 @@ func main() {
 export default React.createClass({
     getInitialState() {
         return {
-            code: initial_program
+            code: initial_program,
+            stdout: 'Hello, playground.',
+            system: 'Program exited.'
         };
     },
     updateCode(newCode) {
@@ -29,8 +31,8 @@ export default React.createClass({
     render() {
         return <div>
             <Nav/>
-            <Editor code={this.state.code} updateCode={this.updateCode}/>
-            <Output/>
+            <Editor code={this.state.code} updateCode={this.updateCode} />
+            <Output stdout={this.state.stdout} system={this.state.system} />
         </div>;
     }
 })
