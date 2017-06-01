@@ -32,6 +32,14 @@ export default React.createClass({
         e.preventDefault();
         console.log("Running Code");
         console.log(this.state.code);
+        axios
+            .post("/run-code", {code: this.state.code})
+            .then((resp) => {
+                console.log(resp);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     },
     fmtCode(e) {
         e.preventDefault();
