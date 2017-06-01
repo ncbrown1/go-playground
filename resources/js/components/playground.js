@@ -28,11 +28,28 @@ export default React.createClass({
             code: newCode
         });
     },
+    runCode(e) {
+        e.preventDefault();
+        console.log("Running Code");
+        console.log(this.state.code);
+    },
+    fmtCode(e) {
+        e.preventDefault();
+        console.log("Formatting Code");
+    },
+    shouldComponentUpdate(nextProps, nextState) {
+        return !nextState.hasOwnProperty("code");
+
+    },
     render() {
         return <div>
-            <Nav/>
-            <Editor code={this.state.code} updateCode={this.updateCode} />
-            <Output stdout={this.state.stdout} system={this.state.system} />
+            <Nav runCode={this.runCode}
+                 fmtCode={this.fmtCode} />
+            <Editor code={this.state.code}
+                    updateCode={this.updateCode}
+                    key="go-editor" />
+            <Output stdout={this.state.stdout}
+                    system={this.state.system} />
         </div>;
     }
 })

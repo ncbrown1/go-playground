@@ -25,8 +25,12 @@ export default React.createClass({
                     <a className="navbar-brand logo" href="#">The Go Playground (Redux)</a>
                 </div>
                 <ul className="nav navbar-nav">
-                    <li><p className="navbar-btn"><a href="#" className="btn btn-primary" id="go-run">Run</a></p></li>
-                    <li><p className="navbar-btn"><a href="#format" className="btn btn-primary" id="format">Format</a></p></li>
+                    <li><p className="navbar-btn">
+                        <a href="#" className="btn btn-primary" id="go-run" onClick={this.props.runCode}>Run</a>
+                    </p></li>
+                    <li><p className="navbar-btn">
+                        <a href="#format" className="btn btn-primary" id="format" onClick={this.props.fmtCode}>Format</a>
+                    </p></li>
                     <li><label className="navbar-btn btn btn-primary">
                         <input type="checkbox" id="go-imports" />
                         {" Imports"}
