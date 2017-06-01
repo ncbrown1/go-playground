@@ -2,8 +2,9 @@ package app
 
 import (
     "net/http"
-    "log"
+    //"log"
     "github.com/gin-gonic/gin"
+    "github.com/ncbrown1/go-playground/app/runtime"
 )
 
 type RunCodeJSON struct {
@@ -16,6 +17,7 @@ func RunCode(c *gin.Context) {
         c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
         return
     }
-    log.Println(run_code.Code)
-    c.Writer.WriteHeader(http.StatusNoContent)
+    //log.Println(run_code.Code)
+    result := runtime.RunCode(run_code.Code)
+    c.JSON(http.StatusOK, result)
 }
