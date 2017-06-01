@@ -19,8 +19,8 @@ export default React.createClass({
     getInitialState() {
         return {
             code: initial_program,
-            stdout: 'Hello, playground.',
-            system: 'Program exited.'
+            stdout: '',
+            system: ''
         };
     },
     updateCode(newCode) {
@@ -30,12 +30,20 @@ export default React.createClass({
     },
     runCode(e) {
         e.preventDefault();
-        console.log("Running Code");
-        console.log(this.state.code);
+        this.setState({
+            stdout: 'Waiting for remote server...',
+            system: ''
+        });
         axios
-            .post("/run-code", {code: this.state.code})
+            .post('/run-code', {code: this.state.code})
             .then((resp) => {
-                console.log(resp);
+                console.log(resp.data);
+                if (resp.data.hasOwnProperty('output')) {
+                    this.setState({
+                        stdout: resp.data.output,
+                        system: 'Program exited.'
+                    });
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -43,11 +51,12 @@ export default React.createClass({
     },
     fmtCode(e) {
         e.preventDefault();
-        console.log("Formatting Code");
+        console.log('Formatting Code');
     },
     shouldComponentUpdate(nextProps, nextState) {
-        return !nextState.hasOwnProperty("code");
-
+        let old_out = this.state.stdout, old_sys = this.state.system,
+            new_out = nextState.stdout, new_sys = nextState.system;
+        return !(old_out === new_out || old_sys === new_sys);
     },
     render() {
         return <div>

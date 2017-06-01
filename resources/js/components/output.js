@@ -5,7 +5,7 @@ export default React.createClass({
         return <div id="go-output">
             <pre>
                 <span className="stdout">{this.props.stdout}</span>
-                <br/>
+                {/*<br/>*/}
                 <span className="system">{this.props.system}</span>
             </pre>
         </div>;
