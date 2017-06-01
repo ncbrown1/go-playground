@@ -2,29 +2,20 @@ package app
 
 import (
     "net/http"
-    "encoding/json"
     "log"
+    "github.com/gin-gonic/gin"
 )
 
 type RunCodeJSON struct {
-    Code string
+    Code string `form:"code" json:"code" binding:"required"`
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
-    renderTemplate(w,"index.html", nil)
-}
-
-func RunCode(w http.ResponseWriter, r *http.Request) {
+func RunCode(c *gin.Context) {
     var run_code RunCodeJSON
-    if r.Body == nil {
-        http.Error(w, "Please send a request body", 400)
+    if err := c.BindJSON(&run_code); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
         return
     }
-    err := json.NewDecoder(r.Body).Decode(&run_code)
-    if err != nil {
-        http.Error(w, err.Error(), 400)
-        return
-    }
-    log.Printf("Program:\n%s", run_code.Code)
-    w.WriteHeader(204)
+    log.Println(run_code.Code)
+    c.Writer.WriteHeader(http.StatusNoContent)
 }
