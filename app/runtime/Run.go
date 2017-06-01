@@ -9,6 +9,7 @@ import (
     "syscall"
     "os"
     "io/ioutil"
+    "log"
 )
 
 func RunCode(code string) (*Result) {
@@ -16,13 +17,28 @@ func RunCode(code string) (*Result) {
     io.WriteString(h, code)
     sha := fmt.Sprintf("%x", h.Sum(nil))
 
-    filename := fmt.Sprintf("/tmp/%s.go", sha)
-    err := ioutil.WriteFile(filename, []byte(code), 0644)
-    if err != nil {
-        panic(err)
+    out_filename := fmt.Sprintf("/tmp/%s.output", sha)
+    src_filename := fmt.Sprintf("/tmp/%s.go", sha)
+    var b []byte
+    var result Result
+    var err error
+
+    // read a Result from the file and if no error, try to decode
+    if b, err = ioutil.ReadFile(out_filename); err == nil {
+        result, err = decodeResults(b)
     }
 
-    result := runGoProgram(filename)
+    // if there was an error, compile and run the code again
+    if err != nil {
+        log.Println("Compiling and running code")
+        err := ioutil.WriteFile(src_filename, []byte(code), 0644)
+        if err != nil {
+            panic(err)
+        }
+        result = runGoProgram(src_filename)
+        ioutil.WriteFile(out_filename, result.encode(), 0644)
+    }
+
     return &result
 }
 
