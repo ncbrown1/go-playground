@@ -441,11 +441,44 @@ name: contribution
 * Added User Login + Sign-up
 * For logged-in users, add enhanced functionality
   * Instead of `NaCl`, use regular `go build`
-  * Run compiled binary under `chroot` environment and clean up afterwards
+  * Run compiled binary under `chroot`-ed environment and clean up afterwards
+      * https://golang.org/pkg/syscall/#Chroot
+      * https://golang.org/pkg/syscall/#StartProcess - wraps [clone(2)](http://man7.org/linux/man-pages/man2/clone.2.html)
   * Still have timeout, albeit a bit longer
       * people shouldn't host websites or mine bitcoin on my playground
   * Don't cache outputs
   * Require WebSocket communication for enhanced functionality
+
+---
+
+# Inspiration - Dan Nurmi
+
+```c
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <sched.h>
+#include <sys/mount.h>
+
+char cstack[1024*1000];
+
+static int child_init() {
+    chroot("/tmp/rootfs");
+    system("mount -t proc proc /proc");
+    // work...
+    return(0);
+}
+
+int main(int argc, char **argv) {
+    pid_t cpid;
+    cpid = clone(child_init, cstack + (1024*1000), CLONE_NEWPID |
+                CLONE_NEWNET | CLONE_NEWNS | SIGCHLD, NULL);
+    waitpid(cpid, NULL, 0);
+    exit(0);
+}
+```
 
 ---
 
