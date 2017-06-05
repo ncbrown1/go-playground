@@ -25,12 +25,47 @@
           content: "";
           position: absolute;
           bottom: -24px;
-          right: 70px;
+          right: 80px;
           height: 60px;
           width: 180px;
           background-repeat: no-repeat;
           background-size: contain;
           background-image: url('ucsb-wordmark-blue.png');
+      }
+
+      .red { color: #fa0000; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      /* corners */
+      .tl-corner, .tr-corner, .bl-corner, .br-corner {
+        position: absolute;
+      }
+      .tl-corner { top: 0; left: 0; }
+      .tr-corner { top: 0.5em; right: 1em; }
+      .bl-corner { bottom: 0; left: 0; }
+      .br-corner { bottom: 1.5em; right: 1em; }
+      .tl-corner img, .tr-corner img, .bl-corner img, .br-corner img {
+        height: 5em;
+      }
+      .displayed img {
+        height: 10em;
+      }
+      /* Two-column layout */
+      .left-column {
+          color: #777;
+          width: 20%;
+          height: 92%;
+          float: left;
+      }
+      .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+      }
+      .right-column {
+          width: 75%;
+          float: right;
+          padding-top: 1em;
       }
       blockquote {
           background: #f9f9f9;
@@ -70,19 +105,28 @@ class: center, middle
 ## Nick Brown
 ## UCSB CS 263 - Spring 2017
 
+.displayed[![sticker](gophers/sticker.png)]
+
 ---
 
 # Agenda
 
-1. Introduction
-2. Problem &amp; Objective
-3. My Contribution/Solution
-4. Implementation
-5. Findings
+1. [Introduction](#intro)
+2. [Objective](#objective)
+3. [System Architecture](#architecture)
+4. [Implementation](#implementation)
+5. [My Contribution](#contribution)
+
+
+.tl-corner[![fancy_gopher_renee](gophers/fancy_gopher_renee.jpg)]
 
 ---
 
+name: intro
+
 # Introduction - GoLang
+
+.br-corner[![baby](gophers/baby.jpg)]
 
 > Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.
 
@@ -99,8 +143,13 @@ class: center, middle
 
 # GoLang Playground
 
+.bl-corner[![gopherswrench](gophers/gopherswrench.jpg)]
+
+A Web service that compiles + executes arbitrary Go code, returning program output
+
 * Original GoLang PlayGround
-  * <https://play.golang.org/>
+  * [https://play.golang.org/](https://play.golang.org/)
+
 * Simple Operations
   * Edit - Write code in [GoLang](https://golang.org/)
   * Run - Send code to server, get back program output or compiler errors
@@ -109,19 +158,311 @@ class: center, middle
 
 ---
 
-# Problem &amp; Objective
+name: objective
+
+# Problem?
+
+.br-corner[![bupher](gophers/bupher.png)]
+
+* The GoLang Playground already exists! Why do we need to remake it???
+
+--
+
+* Current version has restrictions
+  * Limited CPU, RAM
+  * No Network Access
+  * No File System Access
+
+* Concurrency, Networking &rarr; key strengths of GoLang
+
+* Restrictions are half-addressed in Playground
+  * Fake Time
+  * Fake File System
+  * Fake Network
 
 ---
 
-# My Contribution/Solution
+# What do we want?
+
+.tr-corner[![sticker](gophers/sticker.png)]
+
+* To address current version's restrictions
+  * Limited CPU, RAM &rarr; Unlimited?
+  * No Network Access &rarr; Network Access
+  * No File System Access &rarr; FS Access
+
+* But restrict the increased capability to logged-in users
 
 ---
 
-# Implementation
+name: architecture
+
+# Architecture
+
+.tl-corner[![gopherhelmet](gophers/gopherhelmet.jpg)]
+.left-column[![Go Playground Architecture](go-playground.jpg)]
+
+.right-column[
+1. JavaScript Client communicates HTTP/WebSocket with Front-End to display output
+2. Front-End receives user input via HTTP/WebSocket and delivers output from Back-End RPCs to Client
+
+   a. Caches redundant inputs to prevent overload
+
+3. Back-End receives RPCs to compile + execute user programs; returns program output or compiler errors
+]
 
 ---
 
-# Findings
+# Architecture - Client
+
+.br-corner[![gopherhelmet](gophers/gopherhelmet.jpg)]
+.left-column[![Go Playground Architecture](go-playground.jpg)]
+
+.right-column[
+The JavaScript client chooses HTTP or WebSocket interface for running GoLang code and receiving outputs
+
+* **HTTP** - Output is gathered and sent back in one response
+* **WebSocket** - Output is sent to the client as it is generated
+
+Timing is preserved via output delays from JSON response.
+
+* Recall: time is fake on server side
+    * All programs start at `2009-11-10 23:00:00 +0000 UTC`
+* Output is separated into timed chunks
+* To the user, it looks like program is run in real time
+]
+
+---
+
+# Architecture - Front-End
+
+.bl-corner[![gopherhelmet](gophers/gopherhelmet.jpg)]
+.left-column[![Go Playground Architecture](go-playground.jpg)]
+
+.right-column[
+Receives client code, dispatches RPCs, sends translated output and compiler errors back to client
+
+* _Caches_ program outputs so that redundant inputs don't overwhelm the system
+* _Decodes_ output from the Back-End and sends output back to the client with playback info
+
+Mostly trivial &mdash; just a routing/translation component
+]
+
+---
+
+# Architecture - Back-End
+
+.tl-corner[![gopherhelmet](gophers/gopherhelmet.jpg)]
+.left-column[![Go Playground Architecture](go-playground.jpg)]
+
+.right-column[
+Receives small goroutines to _compile_ and _execute_.
+
+* _Compiles_ user code into `NaCl`.red[*] executables
+* _Executes_ compiled code
+* Returns encoded.red[**] output or compilation errors in response
+
+Ensures safe execution of arbitrary code in sandboxed environment (NaCl)
+
+* Compiles differently to fake Time, Network, and FS
+
+.footnote[
+.red[*] Google's Native Client, discussed in next slide
+
+.red[**] Encoded for timed playback
+]
+]
+
+---
+
+name: implementation
+
+# NaCl - Google Native Client
+
+.br-corner[![pirate](gophers/pirate.png)]
+
+Originally designed to permit the safe execution of x86 programs inside web browsers
+
+* Implements sandbox environment for 32-bit x86, 64-bit x86, and 32-bit ARM
+* Arranges assembly instructions in a verifiable way to disable certain functions
+* Typically the job of the linker &mdash; most higher-level packages can stay the same
+  * `syscall` package re-implemented for `NaCl`
+
+It is essentially a new operating system providing its own execution environment
+
+* Includes custom OS features — syscall, malloc, threads, signals, etc.
+* No access to pipes, networking, file system
+* A simulated clock starting at Unix time 1257894000
+
+Unsupported, but available: `PNaCl` &mdash; Portable Native Client
+* Portable bytecode format for `NaCl` based on LLVM
+
+???
+
+Note about 64-bit x86, where NaCl adjustment is also required of compiler and runtime
+* pointers are only 32 bits wide
+* disallows the use of register R15
+* and disallows the use of multi-register addressing modes
+
+---
+
+# Handling Processes
+
+.tr-corner[![cowboy](gophers/cowboy.png)]
+
+```go
+type Message struct {
+    Id   string // client-provided unique id for the process
+    Kind string // "stdout", "stderr", "end"
+    Body string
+}
+
+// Process represents a running process.
+type Process struct {
+    id   string          // user-defined process ID
+    out  chan<- *Message
+    done chan struct{}   // closed when wait completes
+    run  *exec.Cmd       // the command running; Kill method is available
+}
+```
+
+* Keeping track of these objects lets us manage runtime
+* Program output is wrapped in `Message` struct
+* Convert `Message` to/from JSON using Go `encoding/json` package
+
+???
+
+Users and system can kill process
+
+Messages from out are sent over WebSocket Connections
+
+---
+
+# Timing: Front-End &#x2194; Client
+
+.bl-corner[![biplane](gophers/biplane.jpg)]
+
+```go
+func main() {
+    stop := time.After(3 * time.Second)
+    tick := time.NewTicker(1 * time.Second)
+    defer tick.Stop()
+    for {
+        select {
+        case <-tick.C:
+            fmt.Println(time.Now())
+        case <-stop:
+            return
+        }
+    }
+}
+```
+
+```sh
+2009-11-10 23:00:01 +0000 UTC
+2009-11-10 23:00:02 +0000 UTC
+2009-11-10 23:00:03 +0000 UTC
+
+Program exited.
+```
+
+???
+
+This is what the client sends and receives
+* the lines are each separated by a second
+
+---
+
+# Timing: Front-End &#x2194; Client
+
+.tr-corner[![biplane](gophers/biplane.jpg)]
+
+```sh
+0 0 P B <8-byte time> <4-byte data length> <data>
+
+\x00\x00PB\x11\x74\xef\xed\xe6\xb3\x2a\x00\x00\x00\x00\x1e2009-11-10 23:00:01 +0000 UTC
+\x00\x00PB\x11\x74\xef\xee\x22\x4d\xf4\x00\x00\x00\x00\x1e2009-11-10 23:00:02 +0000 UTC
+\x00\x00PB\x11\x74\xef\xee\x5d\xe8\xbe\x00\x00\x00\x00\x1e2009-11-10 23:00:03 +0000 UTC
+```
+
+```json
+{
+    "Errors": "",
+    "Events": [
+        {
+            "Delay": 1000000000,
+            "Message": "2009-11-10 23:00:01 +0000 UTC\n"
+        },
+        {
+            "Delay": 1000000000,
+            "Message": "2009-11-10 23:00:02 +0000 UTC\n"
+        },
+        {
+            "Delay": 1000000000,
+            "Message": "2009-11-10 23:00:03 +0000 UTC\n"
+        }
+    ]
+}
+```
+
+???
+
+Top is what is generated on the back-end
+
+Bottom is what the front-end parses it into
+
+---
+
+# Networking
+
+.bl-corner[![run](gophers/run.png)]
+
+Restrictions on network input and output
+
+* Can use loopback interface (127.0.0.1)
+  * Listening for connections
+  * Making requests
+* Requests to any other hosts will fail horribly
+
+---
+
+name: contribution
+
+# My Contribution
+
+.tl-corner[![viking](gophers/viking.jpg)]
+
+* Replicated all existing functionality of the GoLang Playground
+  * Removed dependency on Google Cloud
+  * Enable both WebSocket + HTTP communication
+* Added User Login + Sign-up
+* For logged-in users, add enhanced functionality
+  * Instead of `NaCl`, use regular `go build`
+  * Run compiled binary under `chroot` environment and clean up afterwards
+  * Still have timeout, albeit a bit longer
+      * people shouldn't host websites or mine bitcoin on my playground
+  * Don't cache outputs
+  * Require WebSocket communication for enhanced functionality
+
+---
+
+class: center, middle
+
+# Thank You!
+
+Questions?
+
+.bl-corner[
+![gophergrad](gophers/gophergrad.jpg)
+![aviator](gophers/aviator.png)
+![bupher](gophers/bupher.png)
+![cowboy](gophers/cowboy.png)
+![fancy_gopher_renee](gophers/fancy_gopher_renee.jpg)
+![biplane](gophers/biplane.jpg)
+![pirate](gophers/pirate.png)
+![viking](gophers/viking.jpg)
+![run](gophers/run.png)
+]
 
     </textarea>
     <script src="remark.min.js"></script>
