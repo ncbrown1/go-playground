@@ -32,6 +32,7 @@ func RunCode(code string) (*Result) {
     if err != nil {
         log.Println("Compiling and running code")
         err := ioutil.WriteFile(src_filename, []byte(code), 0644)
+        defer os.Remove(src_filename)
         if err != nil {
             panic(err)
         }
@@ -47,13 +48,13 @@ func runGoProgram(file string) Result {
     exec_file := fmt.Sprintf("/tmp/prog-%d", pid)
     compile_file := fmt.Sprintf("%s-compiled.o", exec_file)
     compiled := run("go", "tool", "compile", "-o", compile_file, file)
-    run("rm", compile_file) // cleanup unneeded file
+    defer os.Remove(compile_file) // cleanup unneeded file
 
     if compiled.success() {
         run("go", "build", "-o", exec_file, file)
         result := run(exec_file)
 
-        run("rm", exec_file) // cleanup unneeded file
+        defer os.Remove(exec_file) // cleanup unneeded file
         return result
     } else {
         return compiled
