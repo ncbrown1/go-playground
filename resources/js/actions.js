@@ -1,6 +1,9 @@
+import {
+    UPDATE_CODE, SWITCH_LIVE, CLEAR_OUTPUT, ADD_OUTPUT, SET_SYSMSG
+} from './constants';
 
 export const updateCode = (code, force=false) => ({
-    type: 'UPDATE_CODE',
+    type: UPDATE_CODE,
     code: code,
     force: force
 });
@@ -17,7 +20,7 @@ const wsRun = (dispatch, getState) => {
 };
 
 const httpRun = (dispatch, getState) => {
-    const { live, code } = getState();
+    const { code } = getState();
     dispatch(clearOutput());
     dispatch(addOutput('Waiting for remote server...'));
     axios
@@ -39,16 +42,21 @@ export const fmtCode = () => dispatch => {
     dispatch(updateCode('You got bamboozled', true))
 };
 
+export const switchLive = (live) => ({
+    type: SWITCH_LIVE,
+    live: live
+});
+
 export const clearOutput = () => ({
-    type: 'CLEAR_OUTPUT'
+    type: CLEAR_OUTPUT
 });
 
 export const addOutput = (output) => ({
-    type: 'ADD_OUTPUT',
+    type: ADD_OUTPUT,
     output: output
 });
 
 export const setSysMsg = (msg) => ({
-    type: 'SET_SYSMSG',
+    type: SET_SYSMSG,
     system: 'Program ' + msg + '.'
 });
