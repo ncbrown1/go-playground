@@ -26,9 +26,8 @@ func main() {
 
     router = app.SetupRoutes(router)
 
-
     // This will serve all public files under /<filename>
-    router.StaticFS("/", http.Dir("./public/"))
+    router.StaticFS("/_", http.Dir("./public/"))
 
     log.Printf("Serving site in port %s\n", address)
 
