@@ -1,14 +1,21 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
-export default React.createClass({
-    getInitialState() {
-        return {
-            showShare: false
-        };
-    },
+class Nav extends React.Component {
+    run(e) {
+        e.preventDefault();
+        this.props.runCode();
+    }
+
+    fmt(e) {
+        e.preventDefault();
+        this.props.fmtCode();
+    }
+
     render() {
         let shareURL = '';
-        if (this.state.showShare) {
+        if (this.props.sharing) {
             shareURL = <form className="navbar-form">
                 <input type="text" id="share-url" className="form-control" value="https://bit.ly/asdsfafsd"/>
             </form>;
@@ -26,10 +33,10 @@ export default React.createClass({
                 </div>
                 <ul className="nav navbar-nav">
                     <li><p className="navbar-btn">
-                        <a href="#" className="btn btn-primary" id="go-run" onClick={this.props.runCode}>Run</a>
+                        <a href="#" className="btn btn-primary" id="go-run" onClick={this.run.bind(this)}>Run</a>
                     </p></li>
                     <li><p className="navbar-btn">
-                        <a href="#format" className="btn btn-primary" id="format" onClick={this.props.fmtCode}>Format</a>
+                        <a href="#format" className="btn btn-primary" id="format" onClick={this.fmt.bind(this)}>Format</a>
                     </p></li>
                     <li><label className="navbar-btn btn btn-primary">
                         <input type="checkbox" id="go-imports" />
@@ -44,4 +51,22 @@ export default React.createClass({
             </div>
         </nav>;
     }
-});
+}
+
+// Maps state from store to props
+const mapStateToProps = (state, ownProps) => {
+    return {
+        sharing: state.sharing // this.props.sharing
+    };
+};
+
+// Maps actions to props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        runCode: () => dispatch(actions.runCode()),
+        fmtCode: () => dispatch(actions.fmtCode())
+    };
+};
+
+// Use connect to put them together
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);
