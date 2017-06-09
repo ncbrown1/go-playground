@@ -11,6 +11,9 @@ func SetupRoutes(r *gin.Engine) (*gin.Engine){
         c.HTML(200, "index.html", nil)
     })
     r.POST("/run-code", RunCode)
+    r.GET("/ws", func(c *gin.Context) {
+        wshandler(c.Writer, c.Request)
+    })
 
     return r
 }

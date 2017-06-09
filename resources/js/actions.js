@@ -16,7 +16,24 @@ export const runCode = () => (dispatch, getState) => {
 const wsRun = (dispatch, getState) => {
     const { code } = getState();
     dispatch(clearOutput());
-    dispatch(addOutput('WebSockets are not implemented yet. Try again with HTTP.'));
+
+    let url = 'ws://localhost:8000/ws';
+    let c = new WebSocket(url);
+    let i = 0;
+
+    let send = function(data){
+        if (i > 5) return;
+        i++;
+        dispatch(addOutput((new Date())+ " ==> "+data+"\n"));
+        c.send(data)
+    };
+
+    c.onmessage = (msg) => {
+        dispatch(addOutput((new Date())+ " <== "+msg.data+"\n"));
+        console.log(msg)
+    };
+
+    c.onopen = () => setInterval(() => { send("ping") }, 1000);
 };
 
 const httpRun = (dispatch, getState) => {
