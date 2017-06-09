@@ -25,6 +25,11 @@ const wsRun = (dispatch, getState) => {
         c.send(data)
     };
 
+    c.onerror = (err) => {
+        console.log(err);
+        $('<iframe src="http://localhost:8000/ws"></iframe>').appendTo('body');
+    };
+
     c.onmessage = (msg) => {
         // dispatch(addOutput((new Date())+ " <== "+msg.data+"\n"));
         console.log(msg.data);

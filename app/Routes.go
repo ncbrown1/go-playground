@@ -11,7 +11,12 @@ func SetupRoutes(r *gin.Engine) (*gin.Engine){
     r.POST("/run-code", RunCode)
     r.POST("/fmt-code", FmtCode)
 
-    r.GET("/ws", func(c *gin.Context) {
+    authenticated := r.Group("/", gin.BasicAuth(gin.Accounts{
+        "cgaucho": "foobar0",  // 1. user:cgaucho  password:foobar0
+        "starbuck": "c0vf3f3", // 2. user:starbuck password:c0vf3f3
+        "admin": "admin",      // 3. user:admin    password:admin
+    }))
+    authenticated.GET("/ws", func(c *gin.Context) {
         wshandler(c.Writer, c.Request)
     })
 
