@@ -1,8 +1,6 @@
 package app
 
-import (
-    "github.com/gin-gonic/gin"
-)
+import "github.com/gin-gonic/gin"
 
 func SetupRoutes(r *gin.Engine) (*gin.Engine){
 

@@ -19,21 +19,31 @@ const wsRun = (dispatch, getState) => {
 
     let url = 'ws://localhost:8000/ws';
     let c = new WebSocket(url);
-    let i = 0;
 
-    let send = function(data){
-        if (i > 5) return;
-        i++;
-        dispatch(addOutput((new Date())+ " ==> "+data+"\n"));
-        c.send(data)
+    let send = function(data) {
+        // dispatch(addOutput((new Date())+ " ==> "+data+"\n"));
+        c.send(JSON.stringify(data));
     };
 
     c.onmessage = (msg) => {
-        dispatch(addOutput((new Date())+ " <== "+msg.data+"\n"));
-        console.log(msg)
+        // dispatch(addOutput((new Date())+ " <== "+msg.data+"\n"));
+        console.log(msg.data);
+        console.log(msg);
+        let data = msg.data;
+        switch(data.kind) {
+            case "stdout":
+            case "stderr":
+                dispatch(addOutput(data.body));
+                break;
+            case "end":
+                dispatch(setSysMsg('exited'));
+                break;
+            default:
+                break;
+        }
     };
 
-    c.onopen = () => setInterval(() => { send("ping") }, 1000);
+    c.onopen = () => { send(JSON.stringify({"id": '' + new Date().getUTCMilliseconds(), "kind": "run", "body": code})) };
 };
 
 const httpRun = (dispatch, getState) => {
