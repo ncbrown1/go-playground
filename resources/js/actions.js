@@ -22,14 +22,14 @@ const wsRun = (dispatch, getState) => {
 
     let send = function(data) {
         // dispatch(addOutput((new Date())+ " ==> "+data+"\n"));
-        c.send(JSON.stringify(data));
+        c.send(data)
     };
 
     c.onmessage = (msg) => {
         // dispatch(addOutput((new Date())+ " <== "+msg.data+"\n"));
         console.log(msg.data);
         console.log(msg);
-        let data = msg.data;
+        let data = JSON.parse(msg.data);
         switch(data.kind) {
             case "stdout":
             case "stderr":

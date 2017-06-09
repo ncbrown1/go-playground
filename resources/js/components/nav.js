@@ -54,7 +54,7 @@ class Nav extends React.Component {
                         <input type="checkbox" id="go-live" checked={this.props.live} onChange={this.changeLive.bind(this)} />
                         {" WebSockets"}
                     </label></li>
-                    <li><p className="navbar-btn"><a href="#about" className="btn btn-primary" id="about">About</a></p></li>
+                    <li><p className="navbar-btn"><a href="https://github.com/ncbrown1/go-playground" className="btn btn-primary" id="about">About</a></p></li>
                 </ul>
             </div>
         </nav>;

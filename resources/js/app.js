@@ -44,7 +44,10 @@ const stateStore = createStore(reducer, {
     output: '',
     system: '',
     sharing: false
-}, applyMiddleware(thunk));
+}, compose(
+    applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+));
 
 render(
     <Provider store={stateStore}>
