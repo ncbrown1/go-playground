@@ -6,7 +6,18 @@ export const updateCode = (code, force=false) => ({
 });
 
 export const runCode = () => (dispatch, getState) => {
+    const { live } = getState();
+    live ? wsRun(dispatch, getState) : httpRun(dispatch, getState);
+};
+
+const wsRun = (dispatch, getState) => {
     const { code } = getState();
+    dispatch(clearOutput());
+    dispatch(addOutput('WebSockets are not implemented yet. Try again with HTTP.'));
+};
+
+const httpRun = (dispatch, getState) => {
+    const { live, code } = getState();
     dispatch(clearOutput());
     dispatch(addOutput('Waiting for remote server...'));
     axios
@@ -24,7 +35,7 @@ export const runCode = () => (dispatch, getState) => {
         });
 };
 
-export const fmtCode = () => dispatch =>{
+export const fmtCode = () => dispatch => {
     dispatch(updateCode('You got bamboozled', true))
 };
 

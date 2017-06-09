@@ -38,6 +38,7 @@ import Playground from './components/playground';
 
 
 const stateStore = createStore(reducer, {
+    live: false,
     code: initial_program,
     forceEditorRender: false,
     output: '',
