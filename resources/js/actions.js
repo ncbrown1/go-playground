@@ -65,8 +65,19 @@ const httpRun = (dispatch, getState) => {
         });
 };
 
-export const fmtCode = () => dispatch => {
-    dispatch(updateCode('You got bamboozled', true))
+export const fmtCode = () => (dispatch, getState) => {
+    const { code } = getState();
+    axios
+        .post('/fmt-code', {code: code})
+        .then((resp) => {
+            console.log(resp.data);
+            if (resp.data.hasOwnProperty('output')) {
+                dispatch(updateCode(resp.data.output, true));
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 export const switchLive = (live) => ({

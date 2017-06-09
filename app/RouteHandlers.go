@@ -21,3 +21,14 @@ func RunCode(c *gin.Context) {
     result := runtime.RunCode(run_code.Code)
     c.JSON(http.StatusOK, result)
 }
+
+func FmtCode(c *gin.Context) {
+    var run_code RunCodeJSON
+    if err := c.BindJSON(&run_code); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"status": err.Error()})
+        return
+    }
+    //log.Println(run_code.Code)
+    result := runtime.FmtCode(run_code.Code)
+    c.JSON(http.StatusOK, result)
+}
