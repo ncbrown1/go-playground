@@ -11,7 +11,7 @@ const reducer = (state={}, action) => {
             });
         case SWITCH_LIVE:
             return Object.assign({}, state, {
-                live: state.live
+                live: action.live
             });
         case CLEAR_OUTPUT:
             return Object.assign({}, state, {

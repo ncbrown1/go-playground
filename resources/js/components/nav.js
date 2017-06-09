@@ -13,6 +13,10 @@ class Nav extends React.Component {
         this.props.fmtCode();
     }
 
+    changeLive(e) {
+        this.props.switchLive(! this.props.live);
+    }
+
     render() {
         let shareURL = '';
         if (this.props.sharing) {
@@ -46,6 +50,10 @@ class Nav extends React.Component {
                     <li>{ shareURL }</li>
                 </ul>
                 <ul className="nav navbar-nav navbar-right">
+                    <li><label className="navbar-btn btn btn-primary">
+                        <input type="checkbox" id="go-live" checked={this.props.live} onChange={this.changeLive.bind(this)} />
+                        {" WebSockets"}
+                    </label></li>
                     <li><p className="navbar-btn"><a href="#about" className="btn btn-primary" id="about">About</a></p></li>
                 </ul>
             </div>
@@ -56,7 +64,8 @@ class Nav extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
     return {
-        sharing: state.sharing // this.props.sharing
+        sharing: state.sharing, // this.props.sharing
+        live: state.live
     };
 };
 
@@ -64,7 +73,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         runCode: () => dispatch(actions.runCode()),
-        fmtCode: () => dispatch(actions.fmtCode())
+        fmtCode: () => dispatch(actions.fmtCode()),
+        switchLive: (live) => dispatch(actions.switchLive(live))
     };
 };
 
