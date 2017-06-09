@@ -1,3 +1,5 @@
 #!/bin/bash
 
-npm run build && go run server.go -port 8000
+go build -o server server.go
+yarn run start & echo $$!
+./server -p 8000

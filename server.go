@@ -20,6 +20,7 @@ func main() {
 
     address = fmt.Sprintf(":%s", port)
 
+    gin.SetMode(gin.DebugMode)
     router := gin.New()
     router.Use(gin.Logger())
 
